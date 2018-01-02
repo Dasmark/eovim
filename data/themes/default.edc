@@ -311,27 +311,27 @@ collections {
          /*===================================================================
           * Cmdline + Wildmenu Widget
           *===================================================================*/
-         group { "eovim.cmdline_info"; source: "eovim/cmdline_info";
+         swallow { "eovim.cmdline_info";
             desc { "default";
                rel.to: "eovim.cmdline";
                rel2.relative: 0.0 1.0;
-               align: 1.0 0.5;
-               rel2.offset: 4 0;
-               fixed: 1 1;
+               align: 1.0 0.0;
+               rel2.offset: -9 0;
             }
          }
 
-         group { "eovim.cmdline"; source: "eovim/cmdline";
+         swallow { "eovim.cmdline";
             desc { "default";
-               rel1.relative: 0.2 0.0;
+               rel1.relative: 0.2 0.1;
                rel2.relative: 0.8 0.0;
-               align: 0.5 0.0;
-               rel1.offset: 0 40;
+               align: 0.0 0.0;
+               fixed: 1 1;
             }
             desc { "hidden";
                /* Hidden: the textblock will be above the main view */
                inherit: "default";
-               align: 0.5 1.0;
+               align: 0.0 1.0;
+               rel1.relative: 0.2 0.0;
             }
          }
          swallow { "eovim.wildmenu";
@@ -343,8 +343,8 @@ collections {
                rel1.relative: 0.0 1.0;
                rel2.relative: 1.0 0.0;
                align: 0.5 0.0;
-               rel1.offset: 2 -5;
-               rel2.offset: -5 0;
+//               rel1.offset: 2 -5;
+//               rel2.offset: -5 0;
                fixed: 1 1;
             }
             desc { "hidden";

@@ -93,6 +93,9 @@ group { "eovim/cmdline_info";
                middle: SOLID;
             }
             fill.smooth: 0;
+            rel.to: "bg_outline";
+            rel1.offset: -6 -6;
+            rel2.offset: 6 8;
          }
       }
       rect { "bg_fill"; nomouse;
@@ -115,12 +118,10 @@ group { "eovim/cmdline_info";
             text {
                style: "cmdline_default_info";
                min: 1 1;
-               align: 0.5 0.5;
+               align: 1.0 0.5;
                ellipsis: 1.0;
             }
-            rel.to: "base";
-            rel1.offset: 6 5;
-            rel2.offset: -6 -8;
+            align: 1.0 1.0;
          }
       }
    }
@@ -141,6 +142,10 @@ group { "eovim/cmdline";
                middle: SOLID;
             }
             fill.smooth: 0;
+            rel.to: "bg_outline";
+            rel1.offset: -6 -5;
+            rel2.offset: 6 7;
+            align: 0.0 0.0;
          }
       }
       rect { "bg_fill"; nomouse;
@@ -165,20 +170,13 @@ group { "eovim/cmdline";
 
          /* Cursor of the cmdline entry */
          source4: "eovim/cmdline_cursor";
-
          /* TODO: source4: */
-
-         desc { "default";
-            rel1.to: "base";
-            rel2.to: "select_line";
-            rel2.relative: 0.0 1.0;
-            rel1.offset: 6 5;
-            rel2.offset: 0 -8;
-
+         desc { "default"; 
             text {
                min: 0 1;
                style: "cmdline";
             }
+            align: 0.0 1.0;
          }
       }
       image { "select_line"; nomouse;

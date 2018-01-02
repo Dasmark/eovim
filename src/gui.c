@@ -140,6 +140,41 @@ _win_close_cb(void *data,
    nvim_api_command(nvim, cmd, sizeof(cmd) - 1);
 }
 
+static Evas_Object *
+_widget_group_swallow(Evas_Object *edje,
+                      const char *swallow,
+                      const char *group)
+{
+   Evas *const evas = evas_object_evas_get(edje);
+   Evas_Object *const e = edje_object_add(evas);
+
+   const char *const file = main_edje_file_get();
+
+   Eina_Bool ok = edje_object_file_set(e, file, group);
+   if (EINA_UNLIKELY(! ok))
+     {
+        CRI("Failed to get group '%s' in edje file '%s'", group, file);
+        goto fail;
+     }
+
+   ok = edje_object_part_swallow(edje, swallow, e);
+   if (EINA_UNLIKELY(! ok))
+     {
+        CRI("Failed for '%s' to swallow in edje file '%s'", swallow, file);
+        goto fail;
+     }
+//   evas_object_size_hint_align_set(e, EVAS_HINT_FILL, EVAS_HINT_FILL);
+   //evas_object_size_hint_weight_set(e, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+   evas_object_show(e);
+
+
+   return e;
+
+fail:
+   evas_object_del(e);
+   return NULL;
+}
+
 Eina_Bool
 gui_add(s_gui *gui,
         s_nvim *nvim)
@@ -224,8 +259,18 @@ gui_add(s_gui *gui,
     * Command-Line GUI objects
     * ===================================================================== */
 
-   gui->cmdline.obj = edje_object_part_swallow_get(gui->edje, "eovim.cmdline");
-   gui->cmdline.info = edje_object_part_swallow_get(gui->edje, "eovim.cmdline_info");
+   //gui->cmdline.obj = edje_object_part_swallow_get(gui->edje, "eovim.cmdline");
+   //gui->cmdline.info = edje_object_part_swallow_get(gui->edje, "eovim.cmdline_info");
+   gui->cmdline.obj =
+      _widget_group_swallow(gui->edje, "eovim.cmdline", "eovim/cmdline");
+   gui->cmdline.info =
+      _widget_group_swallow(gui->edje, "eovim.cmdline_info", "eovim/cmdline_info");
+   if (EINA_UNLIKELY(! (gui->cmdline.obj && gui->cmdline.info)))
+     {
+        CRI("Failed to setup command-line from edje");
+        goto fail;
+     }
+
 
    /* Table: will hold both the spacer and the genlist */
    gui->cmdline.table = o = elm_table_add(gui->layout);
@@ -1347,7 +1392,7 @@ gui_tabs_add(s_gui *gui,
                                    _tab_activate_cb, gui);
    evas_object_size_hint_align_set(edje, EVAS_HINT_FILL, EVAS_HINT_FILL);
    evas_object_size_hint_weight_set(edje, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-   edje_object_part_text_set(edje, "eovim.tab.title", name);
+   edje_object_part_text_unescaped_set(edje, "eovim.tab.title", name);
    evas_object_show(edje);
 
    if (active)
